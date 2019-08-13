@@ -1,0 +1,27 @@
+[
+  {
+    "id": 1,
+    "bookName": "Angels and Demons",
+    "authorId": 1
+  },
+  {
+    "id": 2,
+    "bookName": "Animal Farm",
+    "authorId": 2
+  },
+  {
+    "id": 3,
+    "bookName": "ABC Murders",
+    "authorId": 3
+  },
+  {
+    "id": 4,
+    "bookName": "A Prisoner of Birth",
+    "authorId": 4
+  },
+  {
+    "id": 5,
+    "bookName": "And Then There were none",
+    "authorId": 3
+  }
+]
