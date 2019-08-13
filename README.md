@@ -16,7 +16,7 @@ How to start the Library application
 ---
 
 1. Run `mvn clean install` to build your application
-1. Start application with `java -jar target/events-0.0.1-SNAPSHOT.jar server config.yml`
+1. Start application with `java -jar library-0.0.1-SNAPSHOT.jar server config.yml'
 1. To check that your application is running enter url `http://localhost:8082`
 
 Health Check
