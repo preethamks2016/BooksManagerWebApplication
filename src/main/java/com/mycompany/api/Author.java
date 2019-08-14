@@ -1,34 +1,23 @@
 package com.mycompany.api;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonSetter;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.validation.constraints.NotNull;
-
+@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@FieldDefaults(makeFinal = false, level = AccessLevel.PRIVATE)
 public class Author {
 
-    @NotNull private Long id;
-    @NotEmpty private String authorName;
+    @NonNull
+    Long id;
 
-    @JsonGetter
-    public long getId() {
-        return id;
-    }
-    @JsonSetter
-    public void setId(long id) {
-        this.id = id;
-    }
-    @JsonGetter
-    public String getAuthorName() {
-        return authorName;
-    }
-    @JsonSetter
-    public void setAuthorName(String name) {
-        this.authorName = name;
-    }
+    @NotEmpty
+    String authorName;
 
-    public void updateExceptId(Author author) {
-        this.authorName = author.authorName;
-    }
+//    public void updateExceptId(Author author) {
+//        this.authorName = author.authorName;
+//    }
 }

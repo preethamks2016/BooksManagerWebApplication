@@ -1,17 +1,11 @@
 package com.mycompany.resources;
 
-import com.mycompany.api.Author;
 import com.mycompany.api.Book;
 import com.mycompany.core.BookRepository;
-import io.dropwizard.jersey.params.LongParam;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
-import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,12 +15,8 @@ import java.util.List;
 @Consumes(MediaType.APPLICATION_JSON)
 public class BookResource {
 
-    @NotNull private BookRepository repository;
-
     @Inject
-    public BookResource(BookRepository repository) {
-        this.repository = repository;
-    }
+    BookRepository repository;
 
     // get all books
 //    @GET
@@ -64,10 +54,10 @@ public class BookResource {
         } else {
             books = repository.findAll();
         }
-        for(Book i:books){
+        for (Book i : books) {
             bookNames.add(i.getBookName());
         }
-        if(bookNames.isEmpty()){
+        if (bookNames.isEmpty()) {
             throw new WebApplicationException("Event not found", 404);
         }
         return bookNames;

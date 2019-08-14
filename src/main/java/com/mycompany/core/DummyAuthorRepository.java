@@ -5,17 +5,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 import com.mycompany.api.Author;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class DummyAuthorRepository implements AuthorRepository {
 
-    private static final String DATA_SOURCE = "dummy_authorData.json";
+    static final String DATA_SOURCE = "dummy_authorData.json";
 
-    private List<Author> authors;
+    List<Author> authors;
 
     public DummyAuthorRepository() {
         try {
@@ -33,7 +36,8 @@ public class DummyAuthorRepository implements AuthorRepository {
 //        CollectionType type = mapper.getTypeFactory()
 //                .constructCollectionType(List.class, Author.class);
 //        authors = mapper.readValue(json, type);
-        authors = mapper.readValue(json, new TypeReference<List<Author>>(){});
+        authors = mapper.readValue(json, new TypeReference<List<Author>>() {
+        });
     }
 
     @Override
@@ -43,36 +47,25 @@ public class DummyAuthorRepository implements AuthorRepository {
 
     @Override
     public Optional<Author> findById(Long id) {
-        return authors.stream().filter(e -> e.getId() == id).findFirst();
+        return authors.stream().filter(e -> e.getId().equals(id)).findFirst();
     }
 
-
-//    @Override
-//    public Author save(Author event) {
-//        Optional<Long> maxId = authors.stream()
-//                .map(Author::getId)
-//                .max(Long::compare);
-//        long nextId = maxId.map(x -> x + 1).orElse(1L);
-//        event.setId(nextId);
-//        authors.add(event);
-//        return event;
-//    }
     @Override
     public Author save(Author author) {
         authors.add(author);
         return author;
     }
-    @Override
-    public Optional<Author> update(Long id, Author author) {
-        Optional<Author> existingEvent = findById(id);
-        existingEvent.ifPresent(e -> e.updateExceptId(author));
-        return existingEvent;
-    }
+//    @Override
+//    public Optional<Author> update(Long id, Author author) {
+//        Optional<Author> existingEvent = findById(id);
+//        existingEvent.ifPresent(e -> e.updateExceptId(author));
+//        return existingEvent;
+//    }
 
-    @Override
-    public void delete(Long id) {
-        authors.removeIf(e -> e.getId() == id);
-    }
+//    @Override
+//    public void delete(Long id) {
+//        authors.removeIf(e -> e.getId() == id);
+//    }
 
 }
 

@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 import com.mycompany.api.Book;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 
 import java.io.IOException;
 import java.net.URL;
@@ -12,11 +14,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class DummyBookRepository implements BookRepository {
 
-    private static final String DATA_SOURCE = "dummy_bookData.json";
+    static final String DATA_SOURCE = "dummy_bookData.json";
 
-    private List<Book> books;
+    List<Book> books;
 
     public DummyBookRepository() {
         try {
@@ -46,13 +49,8 @@ public class DummyBookRepository implements BookRepository {
 
     @Override
     public Optional<Book> findById(Long id) {
-        return books.stream().filter(e -> e.getId() == id).findFirst();
+        return books.stream().filter(e -> e.getId().equals(id)).findFirst();
     }
-
-//    @Override
-//    public Optional<Book> findBooksByAuthorName(String authorName) {
-//        return books.stream().filter(e -> e.getAuthorName().equals(authorName)).findFirst();
-//    }
 
     @Override
     public Optional<List<Book>> findBooksByAuthorId(Long authorId) {
@@ -65,7 +63,10 @@ public class DummyBookRepository implements BookRepository {
         books.add(book);
         return book;
     }
-//
+//    @Override
+//    public Optional<Book> findBooksByAuthorName(String authorName) {
+//        return books.stream().filter(e -> e.getAuthorName().equals(authorName)).findFirst();
+//    }
 //    @Override
 //    public Optional<Book> update(Long id, Author author) {
 //        Optional<Book> existingEvent = findById(id);

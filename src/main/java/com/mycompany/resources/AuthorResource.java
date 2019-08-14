@@ -1,31 +1,22 @@
 package com.mycompany.resources;
 
 import com.mycompany.api.Author;
-import com.mycompany.api.Book;
 import com.mycompany.core.AuthorRepository;
 import io.dropwizard.jersey.params.LongParam;
+import lombok.NoArgsConstructor;
 
 import javax.inject.Inject;
-import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 @Path("authors")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class  AuthorResource {
-
-    @NotNull
-    AuthorRepository repository;
+public class AuthorResource {
 
     @Inject
-    public AuthorResource(AuthorRepository repository) {
-        this.repository = repository;
-    }
+    AuthorRepository repository;
 
     @GET
     public List<Author> allAuthors() {
