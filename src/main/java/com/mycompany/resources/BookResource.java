@@ -18,31 +18,6 @@ public class BookResource {
     @Inject
     BookRepository repository;
 
-    // get all books
-//    @GET
-//    public List<Book> allBooks() {
-//        return repository.findAll();
-//    }
-
-    // get books by author name
-//    @GET
-//    @Path("query")
-//    public Book book(@QueryParam("authorName") String authorName) {
-//        return repository.findBooksByAuthorName(authorName)
-//                .orElseThrow(() ->
-//                        new WebApplicationException("Event not found", 404));
-//    }
-
-    // get books by author id
-
-//    @GET
-//    @Path("{id}")
-//    public Book book(@PathParam("id") LongParam id) {
-//        return repository.findBooksByAuthorId(id.get())
-//                .orElseThrow(() ->
-//                        new WebApplicationException("Event not found", 404));
-//    }
-
     @GET
     public List<String> book(@QueryParam("authorId") Long authorId) {
         List<String> bookNames = new ArrayList<>();

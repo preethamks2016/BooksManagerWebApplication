@@ -6,6 +6,7 @@ import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 import com.mycompany.annotations.dataSourceBook;
 import com.mycompany.api.Book;
+import com.mycompany.memory.BooksCache;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 
@@ -24,6 +25,9 @@ public class DummyBookRepository implements BookRepository {
     List<Book> books;
 
     @Inject
+    BooksCache cache;
+
+    @Inject
     public DummyBookRepository(@dataSourceBook String DATA_SOURCE) {
         this.DATA_SOURCE = DATA_SOURCE;
         try {
@@ -39,9 +43,6 @@ public class DummyBookRepository implements BookRepository {
         URL url = Resources.getResource(DATA_SOURCE);
         String json = Resources.toString(url, Charsets.UTF_8);
         ObjectMapper mapper = new ObjectMapper();
-//        CollectionType type = mapper.getTypeFactory()
-//                .constructCollectionType(List.class, Author.class);
-//        authors = mapper.readValue(json, type);
         books = mapper.readValue(json, new TypeReference<List<Book>>() {
         });
     }
@@ -58,8 +59,18 @@ public class DummyBookRepository implements BookRepository {
 
     @Override
     public Optional<List<Book>> findBooksByAuthorId(Long authorId) {
-        return Optional.of(books.stream().filter(e -> e.getAuthorId() == authorId).collect(Collectors.toList()));
 
+        if (cache.booksByAuthorIdExists(authorId)) {
+            return Optional.of(cache.getBooksByAuthorId(authorId));
+        } else {
+            Optional<List<Book>> booksByAuthor =
+                    Optional.of(books.stream().filter(e -> e.getAuthorId() == authorId)
+                            .collect(Collectors.toList()));
+            if (booksByAuthor.isPresent()) {
+                cache.addBooksByAuthorId(authorId, booksByAuthor.get());
+            }
+            return booksByAuthor;
+        }
     }
 
     @Override

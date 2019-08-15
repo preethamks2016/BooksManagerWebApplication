@@ -6,6 +6,7 @@ import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 import com.mycompany.annotations.dataSourceAuthor;
 import com.mycompany.api.Author;
+import com.mycompany.memory.AuthorsCache;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 
@@ -22,6 +23,8 @@ public class DummyAuthorRepository implements AuthorRepository {
     static String DATA_SOURCE;
 
     List<Author> authors;
+    @Inject
+    AuthorsCache cache;
 
     @Inject
     public DummyAuthorRepository(@dataSourceAuthor String DATA_SOURCE) {
@@ -38,9 +41,6 @@ public class DummyAuthorRepository implements AuthorRepository {
         URL url = Resources.getResource(DATA_SOURCE);
         String json = Resources.toString(url, Charsets.UTF_8);
         ObjectMapper mapper = new ObjectMapper();
-//        CollectionType type = mapper.getTypeFactory()
-//                .constructCollectionType(List.class, Author.class);
-//        authors = mapper.readValue(json, type);
         authors = mapper.readValue(json, new TypeReference<List<Author>>() {
         });
     }
@@ -52,7 +52,15 @@ public class DummyAuthorRepository implements AuthorRepository {
 
     @Override
     public Optional<Author> findById(Long id) {
-        return authors.stream().filter(e -> e.getId().equals(id)).findFirst();
+        if (cache.authorExists(id)) {
+            return cache.getAuthor(id);
+        } else {
+            Optional<Author> newAuthor = authors.stream().filter(e -> e.getId().equals(id)).findFirst();
+            if (newAuthor.isPresent()) {
+                cache.addAuthor(newAuthor);
+            }
+            return newAuthor;
+        }
     }
 
     @Override
