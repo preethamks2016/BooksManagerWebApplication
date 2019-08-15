@@ -11,11 +11,13 @@ import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 
+@Singleton
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class DummyAuthorRepository implements AuthorRepository {
 
