@@ -4,10 +4,12 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
+import com.mycompany.annotations.dataSourceBook;
 import com.mycompany.api.Book;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 
+import javax.inject.Inject;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -17,11 +19,13 @@ import java.util.stream.Collectors;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class DummyBookRepository implements BookRepository {
 
-    static final String DATA_SOURCE = "dummy_bookData.json";
+    static String DATA_SOURCE;
 
     List<Book> books;
 
-    public DummyBookRepository() {
+    @Inject
+    public DummyBookRepository(@dataSourceBook String DATA_SOURCE) {
+        this.DATA_SOURCE = DATA_SOURCE;
         try {
             initData();
         } catch (IOException e) {
